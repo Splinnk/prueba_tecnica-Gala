@@ -82,10 +82,10 @@ export default function CreatePostPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={isLoading}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder-gray-400"
             placeholder="e.g. The Future of Architecture"
             required
-          />
+            />
         </div>
 
         {/* Content Input */}
@@ -99,10 +99,10 @@ export default function CreatePostPage() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             disabled={isLoading}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder-gray-400"
             placeholder="Write the full body of your post here..."
             required
-          />
+            />
         </div>
 
         {/* Image URL Input */}
@@ -116,9 +116,9 @@ export default function CreatePostPage() {
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
             disabled={isLoading}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder-gray-400"
             placeholder="https://example.com/image.jpg"
-          />
+            />
         </div>
 
         {/* Action Buttons */}
