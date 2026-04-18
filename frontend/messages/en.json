@@ -1,0 +1,19 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "create": "Create Post",
+    "back": "Back to Home"
+  },
+  "Post": {
+    "title": "Title",
+    "content": "Content",
+    "imageUrl": "Image URL (Optional)",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "readMore": "Read more",
+    "empty": "No posts available yet."
+  }
+}

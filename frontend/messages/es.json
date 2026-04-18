@@ -1,0 +1,19 @@
+{
+  "Navigation": {
+    "home": "Inicio",
+    "create": "Crear Noticia",
+    "back": "Volver al Inicio"
+  },
+  "Post": {
+    "title": "Título",
+    "content": "Contenido",
+    "imageUrl": "URL de la Imagen (Opcional)",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "readMore": "Leer más",
+    "empty": "Aún no hay noticias disponibles."
+  }
+}
