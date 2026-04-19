@@ -2,7 +2,8 @@
   "Navigation": {
     "home": "Home",
     "create": "Create Post",
-    "back": "Back to Home"
+    "back": "Back to Home",
+    "textHome": "Manage, create, and discover your content."
   },
   "Post": {
     "title": "Title",
@@ -14,6 +15,23 @@
     "delete": "Delete",
     "edit": "Edit",
     "readMore": "Read more",
-    "empty": "No posts available yet."
+    "empty": "No posts available yet.",
+    "placeholderTitle": "e.g. The Future of Architecture",
+    "placeholderContent": "Write the full body of your post here...",
+    "placeholderImageUrl": "https://example.com/image.jpg",
+    "deleteConfirmTitle": "Are you sure?",
+    "deleteConfirmText": "This action cannot be undone. The post will be permanently deleted.",
+    "deleteConfirmYes": "Yes, delete it"
+  },
+  "Toasts": {
+    "createSuccess": "Post created successfully!",
+    "editSuccess": "Post updated successfully.",
+    "deleteSuccess": "Post deleted successfully.",
+    "errorFetch": "Error loading information.",
+    "errorSave": "An error occurred while saving.",
+    "errorDelete": "An error occurred while deleting the post.",
+    "errorNotFound": "The post does not exist or was already deleted.",
+    "errorConflict": "Conflict: The post was modified by someone else. Please refresh the page.",
+    "errorValidation": "Validation error. Please check the fields."
   }
 }

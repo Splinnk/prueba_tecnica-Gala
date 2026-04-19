@@ -2,142 +2,123 @@ import { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
 import { z } from 'zod';
 
-// Validation Schema using Zod
 const postSchema = z.object({
-  title: z.string().min(3, "El título debe tener al menos 3 caracteres"),
-  content: z.string().min(10, "El contenido debe tener al menos 10 caracteres"),
-  imageUrl: z.string().url("Debe ser una URL válida").optional().or(z.literal(''))
+  title: z.string().min(3, "Title must be at least 3 characters long"),
+  content: z.string().min(10, "Content must be at least 10 characters long"),
+  imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal('')),
+  version: z.number().optional()
 });
 
-// Helper function to generate slug from title
 const generateSlug = (title: string): string => {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '');
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 };
 
 export class PostController {
   
-  // GET /api/posts
   static async getAllPosts(req: Request, res: Response): Promise<void> {
     try {
-      const posts = await prisma.post.findMany({
-        orderBy: { createdAt: 'desc' }
-      });
+      const posts = await prisma.post.findMany({ orderBy: { createdAt: 'desc' } });
       res.status(200).json(posts);
     } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor al obtener los posts' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
-  // POST /api/posts
   static async createPost(req: Request, res: Response): Promise<void> {
     try {
-      // 1. Safe Validation (Architectural Best Practice)
       const validationResult = postSchema.safeParse(req.body);
-      
       if (!validationResult.success) {
-        res.status(400).json({ 
-          error: 'La validación falló', 
-          details: validationResult.error.issues 
-        });
+        res.status(400).json({ error: 'Validation failed', details: validationResult.error.issues });
         return;
       }
 
-      const validatedData = validationResult.data;
-      
-      // 2. Generate a unique slug
-      const baseSlug = generateSlug(validatedData.title);
-      const uniqueSlug = `${baseSlug}-${Date.now().toString().slice(-4)}`;
+      const data = validationResult.data;
+      const uniqueSlug = `${generateSlug(data.title)}-${Date.now().toString().slice(-4)}`;
 
-      // 3. Save to database
       const newPost = await prisma.post.create({
         data: {
-          title: validatedData.title,
-          content: validatedData.content,
-          imageUrl: validatedData.imageUrl || null,
-          slug: uniqueSlug
+          title: data.title,
+          content: data.content,
+          imageUrl: data.imageUrl || null,
+          slug: uniqueSlug,
+          version: 1 // Versión inicial
         }
       });
-
       res.status(201).json(newPost);
     } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor al crear el post' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
-  // GET /api/posts/:identifier (ID or Slug)
   static async getPost(req: Request, res: Response): Promise<void> {
     try {
-      const { identifier } = req.params;
-      
       const post = await prisma.post.findFirst({
-        where: {
-          OR: [
-            { id: identifier },
-            { slug: identifier }
-          ]
-        }
+        where: { OR: [{ id: req.params.identifier }, { slug: req.params.identifier }] }
       });
-
       if (!post) {
-        res.status(404).json({ error: 'Post no encontrado' });
+        res.status(404).json({ error: 'Post not found' });
         return;
       }
-
       res.status(200).json(post);
     } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor encontrando el post' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
-  // PUT /api/posts/:id
   static async updatePost(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      
-      // Safe Validation
       const validationResult = postSchema.safeParse(req.body);
       
       if (!validationResult.success) {
-        res.status(400).json({ 
-          error: 'La validación falló', 
-          details: validationResult.error.issues 
-        });
+        res.status(400).json({ error: 'Validation failed', details: validationResult.error.issues });
         return;
       }
 
-      const validatedData = validationResult.data;
+      const data = validationResult.data;
+      const post = await prisma.post.findUnique({ where: { id } });
 
-      // We don't update the slug to prevent breaking existing URLs
+      if (!post) {
+        res.status(404).json({ error: 'Post not found' });
+        return;
+      }
+
+      // Control de Concurrencia Optimista (OCC) puro
+      if (data.version && post.version !== data.version) {
+        res.status(409).json({ error: 'Conflict: Version mismatch' });
+        return;
+      }
+
       const updatedPost = await prisma.post.update({
         where: { id },
         data: {
-          title: validatedData.title,
-          content: validatedData.content,
-          imageUrl: validatedData.imageUrl || null,
+          title: data.title,
+          content: data.content,
+          imageUrl: data.imageUrl || null,
+          version: { increment: 1 } // Subimos la versión automáticamente
         }
       });
 
       res.status(200).json(updatedPost);
     } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor al actualizar el post' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
-  // DELETE /api/posts/:id
   static async deletePost(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      
-      await prisma.post.delete({
-        where: { id }
-      });
+      const post = await prisma.post.findUnique({ where: { id } });
 
-      res.status(204).send(); // 204 No Content is standard for successful deletion
+      if (!post) {
+        res.status(404).json({ error: 'Post not found' });
+        return;
+      }
+
+      await prisma.post.delete({ where: { id } });
+      res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor al eliminar el post' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

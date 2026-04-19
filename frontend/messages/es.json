@@ -2,7 +2,8 @@
   "Navigation": {
     "home": "Inicio",
     "create": "Crear Noticia",
-    "back": "Volver al Inicio"
+    "back": "Volver al Inicio",
+    "textHome": "Gestiona, crea y descubre tu contenido."
   },
   "Post": {
     "title": "Título",
@@ -14,6 +15,23 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "readMore": "Leer más",
-    "empty": "Aún no hay noticias disponibles."
+    "empty": "Aún no hay noticias disponibles.",
+    "placeholderTitle": "ej. El Futuro de la Arquitectura",
+    "placeholderContent": "Escribe aquí el cuerpo completo de tu noticia...",
+    "placeholderImageUrl": "https://ejemplo.com/imagen.jpg",
+    "deleteConfirmTitle": "¿Estás seguro?",
+    "deleteConfirmText": "Esta acción no se puede deshacer. La noticia será eliminada permanentemente.",
+    "deleteConfirmYes": "Sí, eliminar"
+  },
+  "Toasts": {
+    "createSuccess": "¡Noticia creada exitosamente!",
+    "editSuccess": "Noticia actualizada correctamente.",
+    "deleteSuccess": "Noticia eliminada correctamente.",
+    "errorFetch": "Error al cargar la información.",
+    "errorSave": "Ocurrió un error al intentar guardar.",
+    "errorDelete": "Ocurrió un error al intentar eliminar la noticia.",
+    "errorNotFound": "La noticia no existe o ya fue eliminada.",
+    "errorConflict": "Conflicto: La noticia fue modificada por alguien más. Por favor recarga la página.",
+    "errorValidation": "Error de validación. Revisa los campos."
   }
 }
