@@ -1,5 +1,5 @@
 'use client';
-
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTranslations, useLocale } from 'next-intl';
@@ -32,7 +32,7 @@ export default function HomePage() {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
         setPosts(response.data);
-      } catch (err) {
+      } catch {
         setError(tToasts('errorFetch'));
         toast.error(tToasts('errorFetch'));
       } finally {

@@ -40,7 +40,7 @@ export default function EditPostPage() {
         setTitle(data.title);
         setContent(data.content);
         setImageUrl(data.imageUrl || '');
-      } catch (err) {
+      } catch {
         toast.error(tToasts('errorFetch'));
         router.push('/');
       } finally {
